@@ -18,4 +18,25 @@ public class TestServiceImpl implements TestService {
         return mybatisTestMapper.getTest();
     }
 
+    @Override
+    public List<Map<String, Object>> getGlobalAgingIndex() {
+        return mybatisTestMapper.getGlobalAgingIndex();
+    }
+
+    @Override
+    public List<Map<String, Object>> getSupportingExpense() {
+        return mybatisTestMapper.getSupportingExpense();
+    }
+
+    @Override
+    public List<Map<String, Object>> getElderlyFacility() {
+        return mybatisTestMapper.getElderlyFacility();
+    }
+
+    @Override
+    public List<Map<String, Object>> getOldAgePension() {
+        return mybatisTestMapper.getOldAgePension();
+    }
+
+
 }

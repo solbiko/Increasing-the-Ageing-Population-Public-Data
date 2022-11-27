@@ -6,4 +6,89 @@
     <select id="getTest" resultType="HashMap">
         SELECT * FROM loc_code;
     </select>
+
+    <select id="getGlobalAgingIndex" resultType="HashMap">
+        SELECT
+        *
+        FROM(
+        SELECT
+            t.year,
+            MAX(IF(t.country_code = 1409, t.aging_index, 0)) as 'JPN',
+            MAX(IF(t.country_code = 1424, t.aging_index, 0)) as 'KOR',
+            MAX(IF(t.country_code = 2400, t.aging_index, 0)) as 'ISR',
+            MAX(IF(t.country_code = 4214, t.aging_index, 0)) as 'CAN',
+            MAX(IF(t.country_code = 4748, t.aging_index, 0)) as 'USA',
+            MAX(IF(t.country_code = 5235, t.aging_index, 0)) as 'CHL',
+            MAX(IF(t.country_code = 5247, t.aging_index, 0)) as 'COL',
+            MAX(IF(t.country_code = 5259, t.aging_index, 0)) as 'CRI',
+            MAX(IF(t.country_code = 5502, t.aging_index, 0)) as 'MEX',
+            MAX(IF(t.country_code = 6139, t.aging_index, 0)) as 'AUS',
+            MAX(IF(t.country_code = 6547, t.aging_index, 0)) as 'NZL',
+            MAX(IF(t.country_code = 7142, t.aging_index, 0)) as 'AUT',
+            MAX(IF(t.country_code = 7163, t.aging_index, 0)) as 'BEL',
+            MAX(IF(t.country_code = 7274, t.aging_index, 0)) as 'CZE',
+            MAX(IF(t.country_code = 7277, t.aging_index, 0)) as 'DNK',
+            MAX(IF(t.country_code = 7301, t.aging_index, 0)) as 'EST',
+            MAX(IF(t.country_code = 7313, t.aging_index, 0)) as 'FIN',
+            MAX(IF(t.country_code = 7315, t.aging_index, 0)) as 'FRA',
+            MAX(IF(t.country_code = 7331, t.aging_index, 0)) as 'DEU',
+            MAX(IF(t.country_code = 7340, t.aging_index, 0)) as 'GRC',
+            MAX(IF(t.country_code = 7376, t.aging_index, 0)) as 'HUN',
+            MAX(IF(t.country_code = 7379, t.aging_index, 0)) as 'ISL',
+            MAX(IF(t.country_code = 7394, t.aging_index, 0)) as 'IRL',
+            MAX(IF(t.country_code = 7403, t.aging_index, 0)) as 'ITA',
+            MAX(IF(t.country_code = 7436, t.aging_index, 0)) as 'LVA',
+            MAX(IF(t.country_code = 7454, t.aging_index, 0)) as 'LTU',
+            MAX(IF(t.country_code = 7457, t.aging_index, 0)) as 'LUX',
+            MAX(IF(t.country_code = 7538, t.aging_index, 0)) as 'NLD',
+            MAX(IF(t.country_code = 7565, t.aging_index, 0)) as 'NOR',
+            MAX(IF(t.country_code = 7598, t.aging_index, 0)) as 'POL',
+            MAX(IF(t.country_code = 7601, t.aging_index, 0)) as 'PRT',
+            MAX(IF(t.country_code = 7646, t.aging_index, 0)) as 'SVK',
+            MAX(IF(t.country_code = 7649, t.aging_index, 0)) as 'SVN',
+            MAX(IF(t.country_code = 7664, t.aging_index, 0)) as 'ESP',
+            MAX(IF(t.country_code = 7700, t.aging_index, 0)) as 'SWE',
+            MAX(IF(t.country_code = 7703, t.aging_index, 0)) as 'CHE',
+            MAX(IF(t.country_code = 7736, t.aging_index, 0)) as 'TUR',
+            MAX(IF(t.country_code = 7757, t.aging_index, 0)) as 'GBR'
+        FROM (
+        select gai.year, cc.country, gai.country_code, gai.aging_index
+        from global_aging_index gai
+        left join country_code cc on cc.KOICA = gai.country_code
+        group by gai.year, gai.country_code
+        ) t
+        group by t.year
+        ) t2;
+    </select>
+
+
+    <select id="getSupportingExpense" resultType="HashMap">
+        call LOC_YEARLY_DATA('서초구')
+    </select>
+
+    <select id="getElderlyFacility" resultType="HashMap">
+        select
+        ef.year,
+        ef.type,
+        (select ft.type from facilitiy_type ft where ft.id = ef.type) type_name,
+        sum(cnt) sum_cnt,
+        sum(enter_cnt) sum_enter_cnt
+        from elderly_facility ef
+        group by ef.year, ef.type;
+    </select>
+
+    <select id="getOldAgePension" resultType="HashMap">
+        select
+        op.year,
+        op.type,
+        pt.name,
+        if(op.gender = "M", "남", "여") gender,
+        if(op.age = 54, "54세 이하", op.age) age,
+        sum(op.payments) OVER (PARTITION BY op.year, op.type, op.gender, op.age) sum_payments,
+        sum(op.pensioner_num) OVER (PARTITION BY op.year, op.type, op.gender, op.age) sum_pensioner_num
+        from oldage_pension op left join pension_type pt on pt.idx = op.type;
+    </select>
+
+
+
 </mapper>

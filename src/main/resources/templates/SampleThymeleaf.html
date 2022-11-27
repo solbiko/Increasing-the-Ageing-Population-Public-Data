@@ -1,12 +1,204 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>타임리프 테스트</title>
-</head>
-<body>
-<h1>thymeleaf sample</h1>
-<h2>값 호출 = <span th:text="${text}"></span></h2>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>쿼리 테이블 조회</title>
+        <style>
+        body {
+            padding : 50px;
+        }
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+
+        tbody {
+            height: 500px;
+            overflow : scroll;
+        }
+
+        td, th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+
+        tr:nth-child(even) {
+          background-color: #dddddd;
+        }
+
+      </style>
+    </head>
+    <body>
+        <h1>1. OECD 국가의 연도별 노령화 지수 조회</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>연도</th>
+                <th>일본</th>
+                <th>대한민국</th>
+                <th>이스라엘</th>
+                <th>캐나다</th>
+                <th>미국</th>
+                <th>칠레</th>
+                <th>콜롬비아</th>
+                <th>코스타리카</th>
+                <th>멕시코</th>
+                <th>오스트레일리아</th>
+                <th>뉴질랜드</th>
+                <th>오스트리아</th>
+                <th>벨기에</th>
+                <th>체코</th>
+                <th>덴마크</th>
+                <th>에스토니아</th>
+                <th>핀란드</th>
+                <th>프랑스</th>
+                <th>독일</th>
+                <th>그리스</th>
+                <th>헝가리</th>
+                <th>아이슬란드</th>
+                <th>아일랜드</th>
+                <th>이탈리아</th>
+                <th>라트비아</th>
+                <th>리투아니아</th>
+                <th>룩셈부르크</th>
+                <th>네덜란드</th>
+                <th>노르웨이</th>
+                <th>폴란드</th>
+                <th>포르투갈</th>
+                <th>슬로바키아</th>
+                <th>슬로베니아</th>
+                <th>스페인</th>
+                <th>스웨덴</th>
+                <th>스위스</th>
+                <th>터키</th>
+                <th>영국</th>
+            </tr>
+            </thead>
+            <tbody>
+                <!-- tr th:each : 행 반복문을 수행하겠다는 의미입니다 [여러 데이터 출력] -->
+                <tr th:each="list : ${global_aging_index}">
+                    <td><span th:text="${list.year}"></span></td>
+                    <td><span th:text="${list.JPN}"></span></td>
+                    <td><span th:text="${list.KOR}"></span></td>
+                    <td><span th:text="${list.ISR}"></span></td>
+                    <td><span th:text="${list.CAN}"></span></td>
+                    <td><span th:text="${list.USA}"></span></td>
+                    <td><span th:text="${list.CHL}"></span></td>
+                    <td><span th:text="${list.COL}"></span></td>
+                    <td><span th:text="${list.CRI}"></span></td>
+                    <td><span th:text="${list.MEX}"></span></td>
+                    <td><span th:text="${list.AUS}"></span></td>
+                    <td><span th:text="${list.NZL}"></span></td>
+                    <td><span th:text="${list.AUT}"></span></td>
+                    <td><span th:text="${list.BEL}"></span></td>
+                    <td><span th:text="${list.CZE}"></span></td>
+                    <td><span th:text="${list.DNK}"></span></td>
+                    <td><span th:text="${list.EST}"></span></td>
+                    <td><span th:text="${list.FIN}"></span></td>
+                    <td><span th:text="${list.FRA}"></span></td>
+                    <td><span th:text="${list.DEU}"></span></td>
+                    <td><span th:text="${list.GRC}"></span></td>
+                    <td><span th:text="${list.HUN}"></span></td>
+                    <td><span th:text="${list.ISL}"></span></td>
+                    <td><span th:text="${list.IRL}"></span></td>
+                    <td><span th:text="${list.ITA}"></span></td>
+                    <td><span th:text="${list.LVA}"></span></td>
+                    <td><span th:text="${list.LTU}"></span></td>
+                    <td><span th:text="${list.LUX}"></span></td>
+                    <td><span th:text="${list.NLD}"></span></td>
+                    <td><span th:text="${list.NOR}"></span></td>
+                    <td><span th:text="${list.POL}"></span></td>
+                    <td><span th:text="${list.PRT}"></span></td>
+                    <td><span th:text="${list.SVK}"></span></td>
+                    <td><span th:text="${list.SVN}"></span></td>
+                    <td><span th:text="${list.ESP}"></span></td>
+                    <td><span th:text="${list.SWE}"></span></td>
+                    <td><span th:text="${list.CHE}"></span></td>
+                    <td><span th:text="${list.TUR}"></span></td>
+                    <td><span th:text="${list.GBR}"></span></td>
+                    </tr>
+                </tbody>
+        </table>
+
+        <h1>2. 지역구에 따른 연도별 평균, 최소, 최대 노령화 지수, 유소년, 노년 인구 부양비 합계 조회</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>연도</th>
+                <th>지역코드</th>
+                <th>지역이름</th>
+                <th>평균 노령화 지수</th>
+                <th>최소 노령화 지수</th>
+                <th>최대 노령화 지수</th>
+                <th>유소년 부양비 합계</th>
+                <th>노년 부양비 합계</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="list : ${supporting_expense}">
+                    <td><span th:text="${list.year}"></span></td>
+                    <td><span th:text="${list.loc_code}"></span></td>
+                    <td><span th:text="${list.name}"></span></td>
+                    <td><span th:text="${list.avg_ai}"></span></td>
+                    <td><span th:text="${list.min_ai}"></span></td>
+                    <td><span th:text="${list.max_ai}"></span></td>
+                    <td><span th:text="${list.sum_child_se}"></span></td>
+                    <td><span th:text="${list.sum_old_se}"></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h1>3. 연도별, 시설별 노인복지 생활 시설 수 및 입소 현황 통계</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>연도</th>
+                <th>시설 타입</th>
+                <th>시설 이름</th>
+                <th>시설 수 합계</th>
+                <th>입소 수 합계</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list : ${elderly_facility}">
+                <td><span th:text="${list.year}"></span></td>
+                <td><span th:text="${list.type}"></span></td>
+                <td><span th:text="${list.type_name}"></span></td>
+                <td><span th:text="${list.sum_cnt}"></span></td>
+                <td><span th:text="${list.sum_enter_cnt}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h1>4. 연도, 연금 타입, 성별, 나이에 따른 노령연금 지급 현황</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>연도</th>
+                <th>연금타입</th>
+                <th>연금이름</th>
+                <th>성별</th>
+                <th>연령대</th>
+                <th>지금액 합계 (단위: 천원)</th>
+                <th>수급자 합계</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="list : ${oldage_pension}">
+                <td><span th:text="${list.year}"></span></td>
+                <td><span th:text="${list.type}"></span></td>
+                <td><span th:text="${list.name}"></span></td>
+                <td><span th:text="${list.gender}"></span></td>
+                <td><span th:text="${list.age}"></span></td>
+                <td><span th:text="${list.sum_payments}"></span></td>
+                <td><span th:text="${list.sum_pensioner_num}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
 </html>
+
+

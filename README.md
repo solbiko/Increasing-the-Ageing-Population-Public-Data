@@ -93,14 +93,14 @@
             definer = root@localhost procedure LOC_YEARLY_DATA(IN locName varchar(20))
         BEGIN
         select 
-            ai.year,
+           ai.year,
            ai.loc_code,
            l.name,
            round(avg(ai.value))                        avg_ai,
            round(min(ai.value))                        min_ai,
            round(max(ai.value))                        max_ai,
-           round(sum(childhood_supporting_expense)) sum_child_se,
-           round(sum(oldage_supporting_expense))    sum_old_se
+           ifnull(round(sum(childhood_supporting_expense)),'')  sum_child_se,
+           ifnull(round(sum(oldage_supporting_expense)),'')     sum_old_se
         from aging_index ai
         left outer join supporting_expense se on ai.year = se.year and ai.loc_code = se.loc_code
         left join loc_code l on l.code = ai.loc_code
@@ -139,15 +139,15 @@
 4. 연도, 연금 타입, 성별, 나이에 따른 노령연금 지급 현황 : 연도별 노령 연급 지급액이 증가하는 추세
     - 윈도우함수는 Group By와 비슷하게 데이터를 그룹화하여 집계해준다. 하지만 Group By는 집계된 결과만 보여주는 반면, 윈도우함수는 기존 데이터에 집계된 값을 추가하여 나타낸다.
     - group by
-    ![스크린샷 2022-11-27 오후 6 19 18](https://user-images.githubusercontent.com/114554407/204127760-995252a7-6cc9-445a-93d0-ec939dc4c0e2.png)
+    - 
         ``` sql
          -- 나이를 조회 할 수 없고 집계된 데이터를 조회한다.
         select
           op.year,
           op.type,
           pt.name,
-          op.gender,
-          op.age,
+          if(op.gender = "M", "남", "여") gender,
+          if(op.age = 54, "54세 이하", op.age) age,
           sum(op.payments) sum_payments,
           sum(op.pensioner_num) sum_pensioner_num
         from oldage_pension op left join pension_type pt on pt.idx = op.type
@@ -160,8 +160,9 @@
         select 
         op.year,
         op.type,
-        op.gender,
-        op.age,
+        pt.name,
+        if(op.gender = "M", "남", "여") gender,
+        if(op.age = 54, "54세 이하", op.age) age,
         sum(op.payments) OVER (PARTITION BY op.year, op.type, op.gender) sum_payments,
         sum(op.pensioner_num) OVER (PARTITION BY op.year, op.type, op.gender) sum_pensioner_num
         from oldage_pension op left join pension_type pt on pt.idx = op.type;

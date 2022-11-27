@@ -10,4 +10,13 @@ import java.util.Map;
 @Mapper
 public interface MybatisTestMapper {
     List<Map<String, Object>> getTest();
+
+    List<Map<String, Object>> getGlobalAgingIndex();
+
+    List<Map<String, Object>> getSupportingExpense();
+
+    List<Map<String, Object>> getElderlyFacility();
+
+    List<Map<String, Object>> getOldAgePension();
+
 }
