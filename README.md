@@ -142,7 +142,7 @@ Sprint boot + Mybatis + mariaDB + Thymeleaf
 4. 연도, 연금 타입, 성별, 나이에 따른 노령연금 지급 현황 : 연도별 노령 연급 지급액이 증가하는 추세
     - 윈도우함수는 Group By와 비슷하게 데이터를 그룹화하여 집계해준다. 하지만 Group By는 집계된 결과만 보여주는 반면, 윈도우함수는 기존 데이터에 집계된 값을 추가하여 나타낸다.
     - group by
-    ![스크린샷 2022-11-27 오후 8 39 00](https://user-images.githubusercontent.com/114554407/204133240-5cf4c1b5-dd63-4fcb-afa8-3ecc6a8849bf.png)
+    ![스크린샷 2022-11-27 오후 9 13 41](https://user-images.githubusercontent.com/114554407/204134684-f722b4eb-1996-41e3-8cc4-7e3241b3a331.png)
 
         ``` sql
          -- 나이를 조회 할 수 없고 집계된 데이터를 조회한다.
@@ -155,7 +155,7 @@ Sprint boot + Mybatis + mariaDB + Thymeleaf
           sum(op.payments) sum_payments,
           sum(op.pensioner_num) sum_pensioner_num
         from oldage_pension op left join pension_type pt on pt.idx = op.type
-        group by op.year, op.type, op.gender;
+        group by op.year, op.type;
         ```
     - 윈도우함수
     ![스크린샷 2022-11-27 오후 8 30 50](https://user-images.githubusercontent.com/114554407/204133251-bf6f8148-0c27-48b8-ad1b-abd80e08d95d.png)
@@ -168,8 +168,8 @@ Sprint boot + Mybatis + mariaDB + Thymeleaf
         pt.name,
         if(op.gender = "M", "남", "여") gender,
         if(op.age = 54, "54세 이하", op.age) age,
-        sum(op.payments) OVER (PARTITION BY op.year, op.type, op.gender) sum_payments,
-        sum(op.pensioner_num) OVER (PARTITION BY op.year, op.type, op.gender) sum_pensioner_num
+        sum(op.payments) OVER (PARTITION BY op.year, op.type, op.gender, op.age) sum_payments,
+        sum(op.pensioner_num) OVER (PARTITION BY op.year, op.type, op.gender, op.age) sum_pensioner_num
         from oldage_pension op left join pension_type pt on pt.idx = op.type;
         ```
 ## 5. 결론  
