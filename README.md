@@ -1,5 +1,5 @@
 # db_insight_display_program
-
+Sprint boot + Mybatis + mariaDB + Thymeleaf
 
 > 데이터 공개 사이트에서 시간별 데이터나 년간 데이터를 찾아서 소스 테이터에서 통계정보를 제공하는 SQL 문장을 활용하여 정보를 display하는 Database Programming을 하여 제출하세요.
 
@@ -88,53 +88,53 @@
 2. 지역구에 따른 연도별 평균, 최소, 최대 노령화 지수, 유소년, 노년 인구 부양비 합계 조회 : 연도별로 노령화 지수 증가 추세, 노년 인구 부양비 합계 증가 추세
     - 프로시저 호출 (파라미터 : 지역구 이름, null 값 일 때 전체 지역구 조회)
     ![스크린샷 2022-11-27 오후 6 42 06](https://user-images.githubusercontent.com/114554407/204128692-9e3af7c2-62ba-41db-adec-4b7d4ea7c8f5.png)
-    ``` sql
-        create
-            definer = root@localhost procedure LOC_YEARLY_DATA(IN locName varchar(20))
-        BEGIN
-        select 
-           ai.year,
-           ai.loc_code,
-           l.name,
-           round(avg(ai.value))                        avg_ai,
-           round(min(ai.value))                        min_ai,
-           round(max(ai.value))                        max_ai,
-           ifnull(round(sum(childhood_supporting_expense)),'')  sum_child_se,
-           ifnull(round(sum(oldage_supporting_expense)),'')     sum_old_se
-        from aging_index ai
-        left outer join supporting_expense se on ai.year = se.year and ai.loc_code = se.loc_code
-        left join loc_code l on l.code = ai.loc_code
-        where ((locName is null and 1=1) or (locName is not null and name = locName))
-        group by ai.loc_code, ai.year
-        order by ai.loc_code, ai.year;
-        END
-    ```
+        ``` sql
+            create
+                definer = root@localhost procedure LOC_YEARLY_DATA(IN locName varchar(20))
+            BEGIN
+            select 
+               ai.year,
+               ai.loc_code,
+               l.name,
+               round(avg(ai.value))                        avg_ai,
+               round(min(ai.value))                        min_ai,
+               round(max(ai.value))                        max_ai,
+               ifnull(round(sum(childhood_supporting_expense)),'')  sum_child_se,
+               ifnull(round(sum(oldage_supporting_expense)),'')     sum_old_se
+            from aging_index ai
+            left outer join supporting_expense se on ai.year = se.year and ai.loc_code = se.loc_code
+            left join loc_code l on l.code = ai.loc_code
+            where ((locName is null and 1=1) or (locName is not null and name = locName))
+            group by ai.loc_code, ai.year
+            order by ai.loc_code, ai.year;
+            END
+        ```
         
 3. 연도별, 시설별 노인복지 생활 시설 수 및 입소 현황 통계 : 연도별로 증가하는 추세 시설 수 및 입소 정원 또한 증가하는 추세
 
     - 연도별  
     ![스크린샷 2022-11-27 오후 6 44 26](https://user-images.githubusercontent.com/114554407/204128789-6740075b-1265-43d9-9fa0-328a957315a3.png)
-    ``` sql
-      select 
-           ef.year,
-           sum(cnt) ,
-           sum(enter_cnt)
-    from elderly_facility ef
-    group by ef.year;
-    ```
+        ``` sql
+          select 
+               ef.year,
+               sum(cnt) ,
+               sum(enter_cnt)
+        from elderly_facility ef
+        group by ef.year;
+        ```
 
     - 연도, 시설별  
     ![스크린샷 2022-11-27 오후 6 46 39](https://user-images.githubusercontent.com/114554407/204128944-93302889-dece-45d6-9d71-73d39e3238e7.png)
-    ``` sql
-     select
-        ef.year,
-        ef.type,
-        (select ft.type from facilitiy_type ft where ft.id = ef.type) type_name,
-       sum(cnt) ,
-       sum(enter_cnt)
-    from elderly_facility ef
-    group by ef.year, ef.type;
-    ```
+        ``` sql
+         select
+            ef.year,
+            ef.type,
+            (select ft.type from facilitiy_type ft where ft.id = ef.type) type_name,
+           sum(cnt) ,
+           sum(enter_cnt)
+        from elderly_facility ef
+        group by ef.year, ef.type;
+        ```
      
 4. 연도, 연금 타입, 성별, 나이에 따른 노령연금 지급 현황 : 연도별 노령 연급 지급액이 증가하는 추세
     - 윈도우함수는 Group By와 비슷하게 데이터를 그룹화하여 집계해준다. 하지만 Group By는 집계된 결과만 보여주는 반면, 윈도우함수는 기존 데이터에 집계된 값을 추가하여 나타낸다.
