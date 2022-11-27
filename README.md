@@ -139,7 +139,8 @@
 4. 연도, 연금 타입, 성별, 나이에 따른 노령연금 지급 현황 : 연도별 노령 연급 지급액이 증가하는 추세
     - 윈도우함수는 Group By와 비슷하게 데이터를 그룹화하여 집계해준다. 하지만 Group By는 집계된 결과만 보여주는 반면, 윈도우함수는 기존 데이터에 집계된 값을 추가하여 나타낸다.
     - group by
-    - 
+    ![스크린샷 2022-11-27 오후 8 39 00](https://user-images.githubusercontent.com/114554407/204133240-5cf4c1b5-dd63-4fcb-afa8-3ecc6a8849bf.png)
+
         ``` sql
          -- 나이를 조회 할 수 없고 집계된 데이터를 조회한다.
         select
@@ -154,7 +155,8 @@
         group by op.year, op.type, op.gender;
         ```
     - 윈도우함수
-    ![스크린샷 2022-11-27 오후 6 18 26](https://user-images.githubusercontent.com/114554407/204127728-205ae93f-377b-4a76-8cfb-d6ce4f913590.png)
+    ![스크린샷 2022-11-27 오후 8 30 50](https://user-images.githubusercontent.com/114554407/204133251-bf6f8148-0c27-48b8-ad1b-abd80e08d95d.png)
+
         ``` sql
         -- 나이를 포함하여 집계된 데이터를 조회한다.
         select 
