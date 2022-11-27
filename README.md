@@ -30,6 +30,9 @@ Sprint boot + Mybatis + mariaDB + Thymeleaf
   
 ## 4. 데이터 조회
 1. OECD 국가의 연도별 노령화 지수 조회 : 대한민국의 증가추세가 타 국가에 비해 가파른 편
+    - 소스데이터  
+    ![스크린샷 2022-11-27 오후 9 01 41](https://user-images.githubusercontent.com/114554407/204134166-82fa3214-39dd-4904-9a1c-969888fa796c.png)
+
     - 피봇테이블
     ![스크린샷 2022-11-27 오후 6 40 17](https://user-images.githubusercontent.com/114554407/204128614-e5fe0811-668c-4d97-a22b-5d3e59aceee1.png)
         ```sql
